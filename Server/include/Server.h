@@ -1,3 +1,6 @@
+#ifndef SERVER_H
+#define SERVER_H
+
 #include <stdio.h>
 #include <sys/types.h>          
 #include <sys/socket.h>
@@ -14,7 +17,7 @@ public:
      * 
      * @param port the server's port
      */
-    static void StartListening(uint32_t port);
+    static void StartListening(uint16_t port);
 
     /**
      * @brief function handles work with single client
@@ -23,3 +26,5 @@ public:
      */
     static void HandleClient(int socketFd);    
 };
+
+#endif // SERVER_H
