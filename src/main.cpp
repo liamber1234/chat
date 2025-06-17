@@ -5,6 +5,7 @@
 int main(void) {
     char side;
     Client c = Client();
+    Server s = Server();
     printf("enter the side you want to open: S for server and C for client:\n");
     scanf("%c", &side);
     switch (side)
@@ -13,7 +14,7 @@ int main(void) {
         c.Run(LOOP_BACK_IP, strlen(LOOP_BACK_IP), CONFIG_PORT);
         break;
     case 'S':
-        Server::StartListening(CONFIG_PORT);
+        s.StartListening(CONFIG_PORT);
     default:
         break;
     }
