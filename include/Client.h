@@ -15,7 +15,6 @@
 using fd_t = int;
 
 constexpr char* LOOP_BACK_IP = "127.0.0.1";
-constexpr int NO_FLAGS = 0;
 
 class Client
 {

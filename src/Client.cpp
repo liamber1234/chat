@@ -1,5 +1,5 @@
 #include "Client.h"
-#include "../../config.h"
+#include "../config.h"
 
 Client::Client() : socket_fd(0) {}
 

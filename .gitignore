@@ -1,5 +1,3 @@
-Server/.vscode/
-Client/.vscode/
-Server/build/
-Client/build/
+.vscode/
+build/
 *.out

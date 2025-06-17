@@ -5,9 +5,7 @@
 #include <sys/types.h>          
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include "../../config.h"
-
-constexpr int NO_FLAGS = 0;
+#include "../config.h"
 
 class Server
 {
