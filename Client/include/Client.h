@@ -1,11 +1,18 @@
+#ifndef CLIENT_H
+#define CLIENT_H
+
 #include <stdio.h>
-#include "EStatusCode.h"
 #include <stdint.h>
+#include <string.h>
 #include <cstring>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+
+#include "EStatusCode.h"
+
+using fd_t = int;
 
 constexpr char* LOOP_BACK_IP = "127.0.0.1";
 constexpr int NO_FLAGS = 0;
@@ -13,35 +20,41 @@ constexpr int NO_FLAGS = 0;
 class Client
 {
 public:
-    //C'tor
+    // C'tor
     Client();
 
     /**
      * @brief function handles client work - enabling the client connect the server and send messages
      * 
-     * @param IP the server's ip
+     * @param ip the server's ip
      * @param port the server's port
+     * 
+     * @return status code which represents the result of the function
      */
-    void HandleClient(char* IP, uint16_t port);
+    EStatusCode Run(char* ip, uint8_t ip_length, uint16_t port);
 
 private:
     /**
      * @brief function is connecting to server with the given parameters
      * 
-     * @param IP the server's ip
+     * @param ip the server's ip
      * @param port the server's port
      * 
      * @return EStatusCode which represents the function result
      */
-    EStatusCode ConnectToServer(char* IP, uint16_t port);
+    EStatusCode ConnectToServer(char* ip, uint16_t port);
 
     /**
-     * @brief function is sending data to server and check server's answer
+     * @brief function gets input from the user 
      * 
-     * @return EStatusCode which represents the function result
+     * @param buffer to set the input to 
+     * @param o_length out parameter which the buffer length will be saved in 
      */
-    EStatusCode ReceiveSendedData();
+    void GetInput(char* buffer, size_t& o_length);
 
-private:
-    int socket_fd;
+    fd_t socket_fd;
+
+
 };
+
+#endif // CLIENT_H

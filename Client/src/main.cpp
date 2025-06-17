@@ -2,7 +2,6 @@
 #include "../../config.h"
 
 int main(void) {
-    Client *c = new Client();
-    c->HandleClient(LOOP_BACK_IP, CONFIG_PORT);
+    Client c = Client();
+    c.Run(LOOP_BACK_IP, strlen(LOOP_BACK_IP), CONFIG_PORT);
 }
-
