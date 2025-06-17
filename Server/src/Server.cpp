@@ -2,30 +2,36 @@
 
 void Server::StartListening(uint32_t port)
 {
-    printf("hereee");
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(port);
     serverAddress.sin_addr.s_addr = INADDR_ANY;
-        
-    bind(serverSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress));
+
+    if (bind(serverSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) 
+    {
+        printf("failed");
+        return;
+    }
+
     while (true)
     {
         if(listen(serverSocket, 1) == 0)
         {
-            HandleClient(serverSocket);
+            int clientSocket = accept(serverSocket, nullptr, nullptr);
+            HandleClient(clientSocket);
         }
     }
 }
 
-void Server::HandleClient(int socketFd)
+void Server::HandleClient(int clientSocket)
 {
-    int clientSocket = accept(socketFd, nullptr, nullptr);
-    char buffer[1024] = { 0 };
+    char buffer[MAX_BUFFER_SIZE] = { 0 };
+    ssize_t readed_bytes = 0;
 
-    while (recv(clientSocket, buffer, sizeof(buffer), MSG_DONTWAIT) != 0)
+    while (readed_bytes = recv(clientSocket, buffer, MAX_BUFFER_SIZE, NO_FLAGS) > 0)
     {
-        send(socketFd, buffer, sizeof(buffer), NO_FLAGS);
+        printf("%s", buffer);
+        ssize_t bytesSent = send(clientSocket, buffer, MAX_BUFFER_SIZE, 0);
     }
 }

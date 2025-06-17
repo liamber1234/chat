@@ -1,9 +1,13 @@
 #include "Client.h"
+#include "../../config.h"
 
 Client::Client() : socket_fd(0) {}
 
 void Client::HandleClient(char* IP, uint16_t port)
 {
+    this->ConnectToServer(IP, port);
+
+    //while (ReceiveSendedData() == EStatusCode::Success) {}
     
 }
 
@@ -35,15 +39,16 @@ EStatusCode Client::ConnectToServer(char* IP, uint16_t port)
 
 EStatusCode Client::ReceiveSendedData()
 {
-    char sended_buffer[MAX_BUFFER_SIZE];
-    char received_buffer[MAX_BUFFER_SIZE];
+    char sended_buffer[MAX_BUFFER_SIZE] = {0};
+    char received_buffer[MAX_BUFFER_SIZE] = {0};
     printf("Enter message to send");
-    sscanf("%s", sended_buffer);
+    scanf("%s", sended_buffer);
     send(socket_fd, sended_buffer, MAX_BUFFER_SIZE, NO_FLAGS);
     recv(socket_fd, received_buffer, MAX_BUFFER_SIZE, NO_FLAGS);
-
-    if (memcmp(sended_buffer, received_buffer, MAX_BUFFER_SIZE))
+    printf("%s", received_buffer);
+    if (memcmp(sended_buffer, received_buffer, 3) != 0)
     {
+        printf("Bad");
         return EStatusCode::SocketClosed;
     }
     return EStatusCode::Success;

@@ -33,3 +33,4 @@ clean:
 
 run: $(TARGET)
 	./$(TARGET)
+	rm -rf ./$(TARGET)

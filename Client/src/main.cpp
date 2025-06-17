@@ -1,6 +1,8 @@
 #include "Client.h"
+#include "../../config.h"
 
 int main(void) {
-    printf("hello");
+    Client *c = new Client();
+    c->HandleClient(LOOP_BACK_IP, CONFIG_PORT);
 }
 

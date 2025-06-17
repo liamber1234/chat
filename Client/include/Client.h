@@ -8,7 +8,6 @@
 #include <arpa/inet.h>
 
 constexpr char* LOOP_BACK_IP = "127.0.0.1";
-constexpr uint16_t MAX_BUFFER_SIZE = 2048;
 constexpr int NO_FLAGS = 0;
 
 class Client
