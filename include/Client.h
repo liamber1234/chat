@@ -13,8 +13,7 @@
 #include <mutex>
 
 #include "EStatusCode.h"
-
-using fd_t = int;
+#include "../config.h"
 
 constexpr char* LOOP_BACK_IP = "127.0.0.1";
 

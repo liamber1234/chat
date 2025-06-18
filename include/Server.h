@@ -10,10 +10,11 @@
 #include <mutex>
 #include <string.h>
 #include <pthread.h>
+#include <optional>
 
 #include "../config.h"
 
-using fd_t = int;
+constexpr int NOT_EXISTS = -1;
 
 class Server
 {
@@ -53,8 +54,7 @@ public:
     void SendMessageToEveryone(char* message, size_t message_length);
 
 private:
-    fd_t m_all_sockets[MAX_USERS_AMOUNT];
-    bool m_used_sockets[MAX_USERS_AMOUNT];
+    std::optional<fd_t> m_all_sockets[MAX_USERS_AMOUNT];
 };
 
 #endif // SERVER_H

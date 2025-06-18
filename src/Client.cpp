@@ -1,12 +1,11 @@
 #include "Client.h"
-#include "../config.h"
 
 Client::Client() : socket_fd(0) {}
 
 EStatusCode Client::Run(char* ip, uint8_t ip_length, uint16_t port)
 {
     size_t buffer_length = 0;
-    char sended_buffer[MAX_BUFFER_SIZE] = {0};
+    char sent_buffer[MAX_BUFFER_SIZE] = {0};
     char changed_ip[ip_length] = {0}; 
     if (ip == nullptr)
     {
@@ -24,12 +23,11 @@ EStatusCode Client::Run(char* ip, uint8_t ip_length, uint16_t port)
     inner_thread.detach();
     while (true) 
     {
-        GetInput(sended_buffer, buffer_length);
-        if (send(socket_fd, sended_buffer, MAX_BUFFER_SIZE, NO_FLAGS) == -1)
+        GetInput(sent_buffer, buffer_length);
+        if (send(socket_fd, sent_buffer, MAX_BUFFER_SIZE, NO_FLAGS) == -1)
         {
             break;
         }
-        sleep(0.05); // set delay to make the thread print my message before trying to send the next message
     }
     
 }

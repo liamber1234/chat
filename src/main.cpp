@@ -1,6 +1,7 @@
 #include "Client.h"
 #include "Server.h"
 #include "../config.h"
+#include <optional>
 
 int main(void) {
     char side;

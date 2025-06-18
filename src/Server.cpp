@@ -26,9 +26,8 @@ void Server::StartListening(uint16_t port)
         mtx.lock();
         for (size_t i = 0; i < MAX_USERS_AMOUNT; i++)
         {
-            if (m_used_sockets[i] == false)
+            if (!m_all_sockets[i].has_value())
             {
-                m_used_sockets[i] = true;
                 m_all_sockets[i] = clientSocket;
                 break;
             }
@@ -58,10 +57,9 @@ bool Server::DeleteSocket(fd_t socket_fd)
 {
     for (size_t i = 0; i < MAX_USERS_AMOUNT; i++)
     {
-        if (m_all_sockets[i] == socket_fd)
+        if (m_all_sockets[i].value() == socket_fd)
         {
-            m_used_sockets[i] = false;
-            m_all_sockets[i] = -1;
+            m_all_sockets[i] = std::nullopt;
             return true;
         }
     }
@@ -72,9 +70,9 @@ void Server::SendMessageToEveryone(char* message, size_t message_length)
 {
     for (size_t i = 0; i < MAX_USERS_AMOUNT; i++)
     {
-        if (m_used_sockets[i] == true)
+        if (m_all_sockets[i].has_value())
         {
-            send(m_all_sockets[i], message, message_length, NO_FLAGS);
+            send(m_all_sockets[i].value(), message, message_length, NO_FLAGS);
         }
     }
 }

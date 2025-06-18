@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+using fd_t = int;
+
 constexpr uint32_t CONFIG_PORT = 55124;
 constexpr uint16_t MAX_BUFFER_SIZE = 2048;
 constexpr int NO_FLAGS = 0;
