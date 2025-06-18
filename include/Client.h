@@ -9,10 +9,11 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <thread>
+#include <mutex>
 
 #include "EStatusCode.h"
-
-using fd_t = int;
+#include "../config.h"
 
 constexpr char* LOOP_BACK_IP = "127.0.0.1";
 
@@ -51,9 +52,15 @@ private:
      */
     void GetInput(char* buffer, size_t& o_length);
 
+    /**
+     * @brief function receives messages from the server
+     * 
+     * @param socket_fd the file descriptor of the socket
+     */
+    void ReceiveMessages(fd_t socket_fd);
+
+
     fd_t socket_fd;
-
-
 };
 
 #endif // CLIENT_H

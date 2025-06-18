@@ -1,13 +1,11 @@
 #include "Client.h"
-#include "../config.h"
 
 Client::Client() : socket_fd(0) {}
 
 EStatusCode Client::Run(char* ip, uint8_t ip_length, uint16_t port)
 {
     size_t buffer_length = 0;
-    char sended_buffer[MAX_BUFFER_SIZE] = {0};
-    char received_buffer[MAX_BUFFER_SIZE] = {0};
+    char sent_buffer[MAX_BUFFER_SIZE] = {0};
     char changed_ip[ip_length] = {0}; 
     if (ip == nullptr)
     {
@@ -21,16 +19,14 @@ EStatusCode Client::Run(char* ip, uint8_t ip_length, uint16_t port)
     {
         return state;
     }
-
-    while (state == EStatusCode::Success) 
+    std::thread inner_thread = std::thread(&Client::ReceiveMessages, this, socket_fd);
+    inner_thread.detach();
+    while (true) 
     {
-        GetInput(sended_buffer, buffer_length);
-        send(socket_fd, sended_buffer, MAX_BUFFER_SIZE, NO_FLAGS);
-        recv(socket_fd, received_buffer, MAX_BUFFER_SIZE, NO_FLAGS);
-        printf("%s", received_buffer);
-        if (memcmp(sended_buffer, received_buffer, buffer_length) != 0)
+        GetInput(sent_buffer, buffer_length);
+        if (send(socket_fd, sent_buffer, MAX_BUFFER_SIZE, NO_FLAGS) == -1)
         {
-            return EStatusCode::SocketClosed;
+            break;
         }
     }
     
@@ -62,7 +58,20 @@ EStatusCode Client::ConnectToServer(char* ip, uint16_t port)
 
 void Client::GetInput(char* buffer, size_t& o_length)
 {
-    printf("Enter message to send");
+    printf("Enter message to send\n");
     scanf("%s", buffer);
     o_length = strlen(buffer);
+}
+
+void Client::ReceiveMessages(fd_t socket_fd)
+{
+    std::mutex mtx;
+    char received_buffer[MAX_BUFFER_SIZE] = {0};
+    while (recv(socket_fd, received_buffer, MAX_BUFFER_SIZE, NO_FLAGS) != SOCKET_ERROR)
+    {
+        mtx.lock();
+        printf("%s\n", received_buffer);
+        memset(received_buffer, '\0', strlen(received_buffer));
+        mtx.unlock();
+    }
 }
